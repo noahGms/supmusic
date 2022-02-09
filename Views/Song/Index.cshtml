@@ -29,9 +29,12 @@
                         @Html.DisplayFor(modelItem => item.Name)
                     </h5>
                     <p class="card-text">@Html.DisplayFor(modelItem => item.Path)</p>
-                    <form asp-controller="Song" asp-action="Delete" asp-route-id="@item.ID" method="post">
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                    <div class="d-flex">
+                        <button onclick='playSong("@item.Path")' class="btn btn-success me-1">Play</button>
+                        <form asp-controller="Song" asp-action="Delete" asp-route-id="@item.ID" method="post">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

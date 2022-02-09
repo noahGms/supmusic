@@ -32,7 +32,16 @@
     </nav>
 </header>
 <div class="container">
-    <main role="main" class="pb-3">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div id="waveform"></div>
+        <div class="d-flex">
+            <button id="pauseButton" class="btn btn-primary me-1" onclick="pauseSong()">Play</button>
+            <button class="btn btn-danger" onclick="stopSong()">Stop</button>
+        </div>
+    }
+    
+    <main role="main" class="container pb-3">
         @RenderBody()
     </main>
 </div>
@@ -44,7 +53,11 @@
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://unpkg.com/wavesurfer.js"></script>
+@if (User.Identity.IsAuthenticated)
+{
+    <script src="~/js/site.js" asp-append-version="true"></script>
+}
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
