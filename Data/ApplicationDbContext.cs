@@ -12,4 +12,5 @@ public class ApplicationDbContext : IdentityDbContext
     }
     
     public DbSet<Song> Songs { get; set; }
+    public DbSet<Playlist> Playlists { get; set; }
 }

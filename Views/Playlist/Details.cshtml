@@ -1,0 +1,15 @@
+﻿@model Playlist
+
+@{
+    ViewData["Title"] = "Playlist details Page";
+}
+
+<div class="text-center">
+    <div class="d-flex justify-content-center align-items-center">
+        <h1 class="display-4">Playlist Details - @Html.DisplayFor(model => model.Name)</h1>
+    </div>
+    <form class="d-flex w-100 mt-5">
+        <input type="text" class="form-control" placeholder="Search songs">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
