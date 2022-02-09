@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Song>
+
+@{
+    ViewData["Title"] = "Songs Page";
+}
+
+<div class="text-center">
+    <div class="d-flex justify-content-center align-items-center">
+        <h1 class="display-4">My songs</h1>
+        <a class="btn btn-primary ms-2" asp-controller="Song" asp-action="Add">Add song</a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    @foreach (var item in Model)
+    {
+        <div class="col-auto mb-3">
+            <div class="card" style="width: 18rem;">
+              <img height="200px" width="auto" src="https://source.unsplash.com/random" class="card-img-top" alt="song cover">
+              <div class="card-body">
+                  <h5 class="card-title">
+                      @Html.DisplayFor(modelItem => item.ID) - @Html.DisplayFor(modelItem => item.Name)
+                  </h5>
+                <p class="card-text">@Html.DisplayFor(modelItem => item.Path)</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+        </div>
+    }
+</div>
