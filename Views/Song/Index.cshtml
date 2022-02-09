@@ -12,18 +12,27 @@
 </div>
 
 <div class="row mt-5">
+    @if (!Model.Any())
+    {
+        <div class="alert alert-primary" role="alert">
+            No song found
+        </div>
+    } 
+    
     @foreach (var item in Model)
     {
         <div class="col-auto mb-3">
             <div class="card" style="width: 18rem;">
-              <img height="200px" width="auto" src="https://source.unsplash.com/random" class="card-img-top" alt="song cover">
-              <div class="card-body">
-                  <h5 class="card-title">
-                      @Html.DisplayFor(modelItem => item.ID) - @Html.DisplayFor(modelItem => item.Name)
-                  </h5>
-                <p class="card-text">@Html.DisplayFor(modelItem => item.Path)</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
+                <img height="200px" width="auto" src="https://source.unsplash.com/random" class="card-img-top" alt="song cover">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => item.Path)</p>
+                    <form asp-controller="Song" asp-action="Delete" asp-route-id="@item.ID" method="post">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
             </div>
         </div>
     }

@@ -28,7 +28,7 @@ public class SongController : Controller
     
     public async Task<IActionResult> Index()
     {
-        var user = await GetCurrentUser();
+        var user = GetCurrentUser();
         var query = _context.Songs.Where(s => s.User == user);
         
         return View(await query.ToListAsync());
@@ -43,9 +43,7 @@ public class SongController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Upload(IEnumerable<IFormFile> files)
     {
-        var user = await GetCurrentUser();
-        var path = $"wwwroot{Path.DirectorySeparatorChar}musics{Path.DirectorySeparatorChar}{user.Id}";
-        var absolutePath = Path.Join(_baseDir, path);
+        var absolutePath = GetAbsolutePath();
 
         foreach (var file in files)
         {
@@ -65,7 +63,7 @@ public class SongController : Controller
                 {
                     Name = songName,
                     Path = file.FileName,
-                    User = user
+                    User = GetCurrentUser()
                 };
 
                 _context.Add(song);
@@ -76,15 +74,44 @@ public class SongController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var song = await _context.Songs.FindAsync(id);
+        if (song == null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        var absolutePath = GetAbsolutePath();
+        System.IO.File.Delete(Path.Combine(absolutePath, song.Path));
+        
+        _context.Songs.Remove(song);
+        await _context.SaveChangesAsync();
+        
+        return RedirectToAction(nameof(Index));
+    }
+
+    private string GetAbsolutePath()
+    {
+        var user = GetCurrentUser();
+        var path = $"wwwroot{Path.DirectorySeparatorChar}musics{Path.DirectorySeparatorChar}{user.Id}";
+        var absolutePath = Path.Join(_baseDir, path);
+
+        return absolutePath;
+    }
+
     private string GetFileName(string fileName, string substring)
     {
         var indexOfSubstring = fileName.IndexOf(substring, StringComparison.Ordinal);
         var goodFileName = fileName.Remove(indexOfSubstring, substring.Length);
+        
         return goodFileName;
     }
     
-    private async Task<IdentityUser> GetCurrentUser()
+    private IdentityUser GetCurrentUser()
     {
-        return await _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+        return _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result;
     }
 }
