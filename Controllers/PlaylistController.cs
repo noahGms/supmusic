@@ -64,6 +64,22 @@ public class PlaylistController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int Id)
+    {
+        var playlist = await _context.Playlists.FindAsync(Id);
+        if (playlist == null)
+        {
+            NotFound();
+        }
+
+        _context.Playlists.Remove(playlist);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpGet]
     public async Task<List<Song>> SearchSong([FromQuery(Name = "name")] string name)
     {
