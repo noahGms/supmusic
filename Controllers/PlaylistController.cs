@@ -34,8 +34,18 @@ public class PlaylistController : Controller
         {
             return NotFound();
         }
+
+        var query = _context.PlaylistSongs.Where(p => p.Playlist == playlist)
+            .Include(p => p.Song)
+            .Include(p => p.Playlist);
+
+        var temp = new PlaylistDetails
+        {
+            Playlist = playlist,
+            Songs = await query.ToListAsync()
+        };
         
-        return View(playlist);
+        return View(temp);
     }
 
     public IActionResult Create()
@@ -72,6 +82,30 @@ public class PlaylistController : Controller
         {
             NotFound();
         }
+
+        var playlistSong = new PlaylistSong
+        {
+            Playlist = playlist,
+            Song = song
+        };
+        _context.PlaylistSongs.Add(playlistSong);
+        await _context.SaveChangesAsync();
+        
+        return RedirectToAction(nameof(Details), new {@id = Id});
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteSong(int Id, int playlistSongId)
+    {
+        var song = await _context.PlaylistSongs.FindAsync(playlistSongId);
+        if (song == null)
+        {
+            NotFound();
+        }
+
+        _context.PlaylistSongs.Remove(song);
+        await _context.SaveChangesAsync();
         
         return RedirectToAction(nameof(Details), new {@id = Id});
     }
