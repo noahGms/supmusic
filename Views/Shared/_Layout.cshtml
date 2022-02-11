@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -59,6 +63,9 @@
 <script src="https://unpkg.com/wavesurfer.js"></script>
 @if (User.Identity.IsAuthenticated)
 {
+    <script>
+        window.userId = "@UserManager.FindByNameAsync(User.Identity.Name).Result.Id"
+    </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 }
 @await RenderSectionAsync("Scripts", required: false)

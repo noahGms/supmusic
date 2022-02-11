@@ -24,7 +24,7 @@ wavesurfer.on('play', function () {
 });
 
 function loadSong(path) {
-    wavesurfer.load('musics/54726e73-bf76-4981-82ed-013673d9e4c3/' + path);
+    wavesurfer.load(window.location.origin + `/musics/${window.userId}/` + path);
 }
 
 function playSong(path) {
