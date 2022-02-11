@@ -8,8 +8,49 @@
     <div class="d-flex justify-content-center align-items-center">
         <h1 class="display-4">Playlist Details - @Html.DisplayFor(model => model.Name)</h1>
     </div>
-    <form class="d-flex w-100 mt-5">
-        <input type="text" class="form-control" placeholder="Search songs">
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
+    <div class="d-flex w-100 mt-5">
+        <input id="searchSongInput" type="text" class="form-control" placeholder="Search songs">
+        <button type="button" onclick="searchSong()" class="btn btn-primary" name="searchSong">Search</button>
+    </div>
+    <div id="songsWrapper" class="row mt-5">
+        @Html.AntiForgeryToken()
+    </div>
 </div>
+
+<script>
+function searchSong() {
+    const inputVal = $("#searchSongInput").val();
+    const request = $.ajax({
+       type: 'GET',
+       url : window.location.origin + '/Playlist/SearchSong?name=' + inputVal,
+    });
+    request.done(function (response) {
+        const playlistId = @Model.ID;
+        const csrfToken = $('input[name="__RequestVerificationToken"]').val();
+        
+        response.forEach(function (song) {
+            $('#songsWrapper').append(`
+                <div class="col-auto mb-3">
+                    <div class="card" style="width: 18rem;">
+                        <img height="200px" width="auto" src="https://source.unsplash.com/random" class="card-img-top" alt="song cover">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                ${song.name}
+                            </h5>
+                            <p class="card-text">${song.path}</p>
+                            <div class="d-flex">
+                                <button onclick='playSong("${song.path}")' class="btn btn-success me-1">Play</button>
+                                <form action="/Playlist/AddSong/${playlistId}" method="post">
+                                    <input name="__RequestVerificationToken" type="hidden" value="${csrfToken}" />
+                                    <input type="text" id="songId" name="songId" value="${song.id}" hidden>
+                                    <button type="submit" class="btn btn-primary">Add</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `)
+        });
+    });
+}
+</script>

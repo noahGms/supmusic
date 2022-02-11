@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using supmusic.Data;
@@ -6,6 +7,7 @@ using supmusic.Models;
 
 namespace supmusic.Controllers;
 
+[Authorize]
 public class PlaylistController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -51,7 +53,29 @@ public class PlaylistController : Controller
         
         return RedirectToAction(nameof(Index));
     }
-    
+
+    [HttpGet]
+    public async Task<List<Song>> SearchSong([FromQuery(Name = "name")] string name)
+    {
+        var request = _context.Songs.Where(s => s.Name.Contains(name));
+        return await request.ToListAsync();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<RedirectToActionResult> AddSong(int Id, int songId)
+    {
+        var playlist = await _context.Playlists.FindAsync(Id);
+        var song = await _context.Songs.FindAsync(songId);
+        
+        if (playlist == null || song == null)
+        {
+            NotFound();
+        }
+        
+        return RedirectToAction(nameof(Details), new {@id = Id});
+    }
+
     private IdentityUser GetCurrentUser()
     {
         return _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result;
