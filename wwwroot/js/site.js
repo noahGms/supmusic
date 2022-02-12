@@ -8,14 +8,29 @@ const wavesurfer = WaveSurfer.create({
     progressColor: 'purple'
 });
 
-let isPlaylist = null;
+const playerMode = {};
+const playerModeProxy = new Proxy(playerMode, {
+    set: function(target, key, value) {
+        target[key] = value;
+        
+        if (value === false) {
+            $('#previousSong').prop("disabled",true);
+            $('#nextSong').prop("disabled",true);
+        } else {
+            $('#previousSong').prop("disabled",false);
+            $('#nextSong').prop("disabled",false);
+        }
+        
+        return true;
+    }
+});
 
 const current_song = localStorage.getItem('current_song');
 if (current_song) {
     loadSong(current_song);
     const name = getNameWithoutExtension(current_song);
     updateSongInProgressText(name);
-    isPlaylist = false;
+    playerModeProxy.isPlaylist = false;
 }
 const playlistSong = JSON.parse(localStorage.getItem('playlist'));
 const playlistCurrentSong = localStorage.getItem('current_song_playlist');
@@ -23,7 +38,7 @@ if (playlistSong && playlistCurrentSong) {
     loadSong(playlistSong[parseInt(playlistCurrentSong)].path);
     updateSongInProgressText(playlistSong[parseInt(playlistCurrentSong)].name);
     localStorage.setItem('current_song_playlist', playlistCurrentSong);
-    isPlaylist = true;
+    playerModeProxy.isPlaylist = true;
 }
 
 wavesurfer.on('pause', function () {
@@ -37,7 +52,7 @@ wavesurfer.on('play', function () {
 });
 
 wavesurfer.on('finish', function () {
-    if (isPlaylist) {
+    if (playerModeProxy.isPlaylist) {
         nextPlaylistSong();
     }
 });
@@ -57,7 +72,7 @@ function playSong(path) {
     localStorage.removeItem('playlist');
     localStorage.removeItem('current_song_playlist');
 
-    isPlaylist = false;
+    playerModeProxy.isPlaylist = false;
 }
 
 async function playPlaylist(playlistId) {
@@ -81,7 +96,7 @@ async function playPlaylist(playlistId) {
     localStorage.setItem('current_song_playlist', currentSong);
     localStorage.removeItem('current_song');
 
-    isPlaylist = true;
+    playerModeProxy.isPlaylist = true;
 }
 
 function nextPlaylistSong() {
