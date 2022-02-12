@@ -85,7 +85,30 @@ function nextPlaylistSong() {
     const nextCurrentSong = parseInt(currentSong) + 1;
     if (nextCurrentSong < songs.length) {
         loadSong(songs[nextCurrentSong].path);
+        wavesurfer.on('ready', function () {
+            wavesurfer.play();
+        });
         localStorage.setItem('current_song_playlist', nextCurrentSong);
+    } else {
+        loadSong(songs[0].path);
+        wavesurfer.on('ready', function () {
+           stopSong(); 
+        });
+        localStorage.setItem('current_song_playlist', 0);
+    }
+}
+
+function previousPlaylistSong() {
+    const songs = JSON.parse(localStorage.getItem('playlist'));
+    const currentSong = localStorage.getItem('current_song_playlist');
+
+    if (currentSong > 0) {
+        const previousCurrentSong = parseInt(currentSong) - 1;
+        loadSong(songs[previousCurrentSong].path);
+        wavesurfer.on('ready', function () {
+            wavesurfer.play();
+        });
+        localStorage.setItem('current_song_playlist', previousCurrentSong);
     } else {
         loadSong(songs[0].path);
         wavesurfer.on(function () {
