@@ -126,6 +126,15 @@ public class PlaylistController : Controller
         return RedirectToAction(nameof(Details), new {@id = Id});
     }
 
+    public async Task<List<PlaylistSong>> GetPlaylistSongs(int Id)
+    {
+        var query = _context.PlaylistSongs.Where(p => p.Playlist.ID == Id)
+            .Include(p => p.Playlist)
+            .Include(p => p.Song);
+
+        return await query.ToListAsync();
+    }
+
     private IdentityUser GetCurrentUser()
     {
         return _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result;
