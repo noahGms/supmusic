@@ -5,7 +5,10 @@
 const wavesurfer = WaveSurfer.create({
     container: '#waveform',
     waveColor: 'violet',
-    progressColor: 'purple'
+    progressColor: 'purple',
+    fillParent: true,
+    minPxPerSec: 10,
+    height: 40
 });
 
 const playerMode = {};
@@ -43,12 +46,12 @@ if (playlistSong && playlistCurrentSong) {
 
 wavesurfer.on('pause', function () {
    const pauseButton = document.getElementById("pauseButton");
-   pauseButton.innerHTML = "Play";
+   pauseButton.innerHTML = `<i class="fa fa-play"></i>`;
 });
 
 wavesurfer.on('play', function () {
     const pauseButton = document.getElementById("pauseButton");
-    pauseButton.innerHTML = "Pause";
+    pauseButton.innerHTML = `<i class="fa fa-pause"></i>`;
 });
 
 wavesurfer.on('finish', function () {
@@ -158,3 +161,22 @@ function updateSongInProgressText(name) {
 function getNameWithoutExtension(name) {
     return name.replace('.mp3', '');
 }
+
+function toggleDarkMode() {
+    halfmoon.toggleDarkMode();
+    updateToggleDarkModeSwitch();
+}
+
+function updateToggleDarkModeSwitch() {
+    if (halfmoon.readCookie("halfmoon_preferredMode")) {
+        if (halfmoon.readCookie("halfmoon_preferredMode") === "light-mode") {
+            $('#toggleDarkModeInput').prop("checked", false);
+            $('#toggleDarkModeLabel').html(`<i class="fas fa-sun"></i>`);
+        }
+        else if (halfmoon.readCookie("halfmoon_preferredMode") === "dark-mode") {
+            $('#toggleDarkModeInput').prop("checked", true);
+            $('#toggleDarkModeLabel').html(`<i class="fas fa-moon"></i>`);
+        }
+    }
+}
+updateToggleDarkModeSwitch();
