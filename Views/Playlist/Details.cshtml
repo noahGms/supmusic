@@ -4,44 +4,55 @@
     ViewData["Title"] = "Playlist details Page";
 }
 
-<div class="text-center">
+<div class="text-center mt-20" style="margin-bottom: 70px;">
     <div class="d-flex justify-content-center align-items-center">
-        <h1 class="display-4">Playlist Details - @Html.DisplayFor(model => model.Playlist.Name)</h1>
-        <button onclick="playPlaylist(@Model.Playlist.ID)" class="btn btn-primary">Play all</button>
+        <h1>Playlist Details - @Html.DisplayFor(model => model.Playlist.Name)</h1>
+        <button onclick="playPlaylist(@Model.Playlist.ID)" class="btn btn-success ml-10">
+            <i class="fa fa-play"></i>
+        </button>
     </div>
-    <div class="d-flex w-100 mt-5">
-        <input id="searchSongInput" type="text" class="form-control" placeholder="Search songs">
-        <button type="button" onclick="searchSong()" class="btn btn-primary">Search</button>
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="d-flex w-500 mt-5">
+            <input id="searchSongInput" type="text" class="form-control" placeholder="Search songs to adding in playlist">
+            <button type="button" onclick="searchSong()" class="btn btn-primary">Search</button>
+        </div>
     </div>
-    <div id="songsWrapper" class="row mt-5">
+    <div id="songsWrapper" class="w-full mt-5">
         @Html.AntiForgeryToken()
+    </div>
+    <div class="row mt-20">
+        <div class="col">
+            <h4>Songs</h4>
+        </div>
     </div>
     <div class="row">
         <div class="col">
-            <ul class="list-group">
-                @if (!Model.Songs.Any())
-                {
-                    <div class="alert alert-primary" role="alert">
-                        No song found
-                    </div>
-                }
-                
-                @foreach (var item in Model.Songs)
-                {
-                    <li class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <p class="mb-0">@Html.DisplayFor(model => item.Song.Name)</p>
-                            <div class="d-flex">
-                                <button onclick='playSong("@item.Song.Path")' class="btn btn-success me-1">Play</button>
-                                <form asp-controller="Playlist" asp-action="DeleteSong" asp-route-id="@item.Playlist.ID" method="post">
-                                    <input type="text" id="playlistSongId" name="playlistSongId" value="@item.Id" hidden="hidden">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
+            @if (!Model.Songs.Any())
+                    {
+                        <div class="alert alert-primary" role="alert">
+                            No song found
+                        </div>
+                    }
+                    
+                    @foreach (var item in Model.Songs)
+                    {
+                        <div class="card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="card-title mb-0">@Html.DisplayFor(model => item.Song.Name)</p>
+                                <div class="d-flex align-items-center">
+                                    <button onclick='playSong("@item.Song.Path")' class="btn btn-success mr-10">
+                                        <i class="fa fa-play"></i>
+                                    </button>
+                                    <form asp-controller="Playlist" asp-action="DeleteSong" asp-route-id="@item.Playlist.ID" method="post">
+                                        <input type="text" id="playlistSongId" name="playlistSongId" value="@item.Id" hidden="hidden">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </li>
-                }
-            </ul>
+                    }
         </div>
     </div>
 </div>
@@ -58,21 +69,23 @@ function searchSong() {
         const csrfToken = $('input[name="__RequestVerificationToken"]').val();
         
         response.forEach(function (song) {
-            $('#songsWrapper').append(`
-                <div class="col-auto mb-3">
-                    <div class="card" style="width: 18rem;">
-                        <img height="200px" width="auto" src="https://source.unsplash.com/random" class="card-img-top" alt="song cover">
-                        <div class="card-body">
+            $('#songsWrapper').html(`
+                <div class="mb-30">
+                    <div class="card">
+                        <div class="d-flex justify-content-between align-items-center">
                             <h5 class="card-title">
                                 ${song.name}
                             </h5>
-                            <p class="card-text">${song.path}</p>
-                            <div class="d-flex">
-                                <button onclick='playSong("${song.path}")' class="btn btn-success me-1">Play</button>
+                            <div class="d-flex align-items-center">
+                                <button onclick='playSong("${song.path}")' class="btn btn-success mr-10">
+                                   <i class="fa fa-play"></i>
+                                </button>
                                 <form action="/Playlist/AddSong/${playlistId}" method="post">
                                     <input name="__RequestVerificationToken" type="hidden" value="${csrfToken}" />
                                     <input type="text" id="songId" name="songId" value="${song.id}" hidden>
-                                    <button type="submit" class="btn btn-primary">Add</button>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-plus"></i>                                    
+                                    </button>
                                 </form>
                             </div>
                         </div>
