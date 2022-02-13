@@ -4,33 +4,42 @@
     ViewData["Title"] = "Playlist Page";
 }
 
-<div class="text-center">
+<div class="text-center mt-20">
     <div class="d-flex justify-content-center align-items-center">
         <h1 class="display-4">My playlists</h1>
-        <a class="btn btn-primary ms-2" asp-controller="Playlist" asp-action="Create">Create playlist</a>
+        <a class="btn btn-primary ml-10" asp-controller="Playlist" asp-action="Create">Create playlist</a>
     </div>
 </div>
 
-<ul class="list-group mt-5">
+<div class="px-10">
     @if (!Model.Any())
     {
         <div class="alert alert-primary" role="alert">
-            No playlist found
+            <h4 class="alert-heading mb-0">
+                No playlist found
+            </h4>
         </div>
     }
     
     @foreach (var playlist in Model)
     {
-        <li class="list-group-item">
+        <div class="card">
             <div class="d-flex justify-content-between align-items-center">
-                <p class="mb-0">@Html.DisplayFor(modelItem => playlist.Name)</p>
+                <p class="card-title mb-0">@Html.DisplayFor(modelItem => playlist.Name)</p>
                 <div class="d-flex">
-                    <a class="btn btn-primary me-1" asp-action="Details" asp-route-id="@playlist.ID">Details</a>
+                    <button class="btn btn-success mr-10" onclick="playPlaylist(@playlist.ID)">
+                        <i class="fa fa-play"></i>
+                    </button>
+                    <a class="btn btn-primary mr-10" asp-action="Details" asp-route-id="@playlist.ID">
+                        <i class="fa fa-eye"></i>
+                    </a>
                     <form asp-controller="Playlist" asp-action="Delete" asp-route-Id="@playlist.ID">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa fa-trash"></i>
+                        </button>
                     </form>
                 </div>
             </div>
-        </li>
+        </div>
     }
-</ul>
+</div>
