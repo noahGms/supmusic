@@ -33,6 +33,9 @@
                     <a class="btn btn-primary mr-10" asp-action="Details" asp-route-id="@playlist.ID">
                         <i class="fa fa-eye"></i>
                     </a>
+                    <a class="btn btn-primary mr-10" asp-action="Edit" asp-route-id="@playlist.ID">
+                        <i class="fa fa-pen"></i>
+                    </a>
                     <form asp-controller="Playlist" asp-action="Delete" asp-route-Id="@playlist.ID">
                         <button type="submit" class="btn btn-danger">
                             <i class="fa fa-trash"></i>

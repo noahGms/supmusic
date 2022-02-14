@@ -1,0 +1,24 @@
+@model Playlist
+
+@{
+    ViewData["Title"] = "Create playlist";
+}
+
+<div class="text-center mt-20">
+    <h1>Edit playlist</h1>
+</div>
+
+<div class="d-flex justify-content-center w-full">
+    <div class="w-500">
+        <form asp-controller="Playlist" asp-action="Update" class="mt-5 px-20">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="text" asp-for="ID" hidden="hidden">
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <button class="btn btn-primary btn-block mt-10" type="submit">Update</button>
+        </form>
+    </div>
+</div>

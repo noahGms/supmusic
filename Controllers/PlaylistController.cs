@@ -64,6 +64,27 @@ public class PlaylistController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    public async Task<IActionResult> Edit(int Id)
+    {
+        var playlist = await _context.Playlists.FindAsync(Id);
+        if (playlist == null)
+        {
+            NotFound();
+        }
+
+        return View(playlist);
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Update(Playlist playlist)
+    {
+        _context.Playlists.Update(playlist);
+        await _context.SaveChangesAsync();
+        
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int Id)
