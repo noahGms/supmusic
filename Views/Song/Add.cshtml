@@ -9,9 +9,20 @@
 <div class="d-flex justify-content-center w-full">
     <div class="w-500">
         <form asp-controller="Song" asp-action="Upload" method="post" enctype="multipart/form-data" class="mt-5">
-            <div class="mb-3">
+            <div class="form-group">
                 <label for="files" class="form-label">Upload songs</label>
                 <input class="form-control" type="file" id="files" name="files" multiple="multiple">
+            </div>
+            <hr class="mt-20">
+            <h4 class="text-center mb-0">OR</h4>
+            <hr class="mb-20">
+            <div class="form-group">
+                <label for="songUrlName" class="form-label">Online Song name</label>
+                <input type="text" class="form-control" id="songUrlName" name="songUrlName">
+            </div>
+            <div class="form-group">
+                <label for="url" class="form-label">Online song url</label>
+                <input type="text" class="form-control" id="url" name="url">
             </div>
             <button class="btn btn-primary btn-block mt-10" type="submit">Add</button>
         </form>

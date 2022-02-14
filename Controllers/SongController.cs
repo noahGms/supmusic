@@ -41,33 +41,46 @@ public class SongController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Upload(IEnumerable<IFormFile> files)
+    public async Task<IActionResult> Upload(IEnumerable<IFormFile> files, string? songUrlName, string? url)
     {
-        var absolutePath = GetAbsolutePath();
-
-        foreach (var file in files)
+        if (url != null && songUrlName != null)
         {
-            if (!Directory.Exists(absolutePath))
+            var song = new Song
             {
-                Directory.CreateDirectory(absolutePath);
-            }
+                Name = songUrlName,
+                Path = url,
+                User = GetCurrentUser()
+            };
 
-            await using (var fileStream = new FileStream(Path.Combine(absolutePath, file.FileName), FileMode.Create,
-                             FileAccess.Write))
+            _context.Add(song);
+            await _context.SaveChangesAsync();
+        } else if (files.Count() != 0) {
+            var absolutePath = GetAbsolutePath();
+
+            foreach (var file in files)
             {
-                await file.CopyToAsync(fileStream);
-
-                var songName = GetFileName(file.FileName, ".mp3");
-
-                var song = new Song
+                if (!Directory.Exists(absolutePath))
                 {
-                    Name = songName,
-                    Path = file.FileName,
-                    User = GetCurrentUser()
-                };
+                    Directory.CreateDirectory(absolutePath);
+                }
 
-                _context.Add(song);
-                await _context.SaveChangesAsync();
+                await using (var fileStream = new FileStream(Path.Combine(absolutePath, file.FileName), FileMode.Create,
+                                 FileAccess.Write))
+                {
+                    await file.CopyToAsync(fileStream);
+
+                    var songName = GetFileName(file.FileName, ".mp3");
+
+                    var song = new Song
+                    {
+                        Name = songName,
+                        Path = file.FileName,
+                        User = GetCurrentUser()
+                    };
+
+                    _context.Add(song);
+                    await _context.SaveChangesAsync();
+                }
             }
         }
         
