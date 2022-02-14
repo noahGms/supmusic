@@ -159,12 +159,24 @@
                         min="0"
                         max="100"
                         value="50"/>
-                    <button class="ml-5 btn">
+                    <button onclick="openQueueModal()" class="ml-5 btn">
                         <i class="fa fa-list"></i>
                     </button>
                 </div>
             </div>
         </nav>
+        
+        <div class="modal ie-scroll-fix" id="queue-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div id="modal-queue-content" class="modal-content w-600">
+                    <a href="#" class="close" role="button" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+                    <h5 class="modal-title">Queue</h5>
+                    <div id="queue-modal-content"></div>
+                </div>
+            </div>
+        </div>
     }
 </div>
 

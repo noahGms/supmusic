@@ -161,3 +161,41 @@ function updateSongInProgressText(name) {
 function getNameWithoutExtension(name) {
     return name.replace('.mp3', '');
 }
+
+function openQueueModal() {
+    $('#queue-modal-content').html('');
+    if (playerModeProxy.isPlaylist) {
+        const songs = JSON.parse(localStorage.getItem('playlist'));
+        const currentSong = localStorage.getItem('current_song_playlist');
+        
+        songs.forEach((song, idx) => {
+            const isCurrentSong = parseInt(currentSong) === parseInt(idx); 
+            const bgColor = isCurrentSong ? 'background-color: gray !important; color: white;' : '';
+            
+            $('#queue-modal-content').append(`
+                <div class="card h-50" style="${bgColor}">
+                    <div class="d-flex justify-content-between align-items-center h-full">
+                        <p class="card-title mb-0">${song.name}</p>
+                        <div class="d-flex">
+                            Actions
+                        </div>
+                    </div>
+                </div>
+            `);
+        });
+    } else {
+        const song = localStorage.getItem('current_song');
+        $('#queue-modal-content').append(`
+            <div class="card h-50" style="background-color: gray !important; color: white;">
+                <div class="d-flex justify-content-between align-items-center h-full">
+                    <p class="card-title mb-0">${getNameWithoutExtension(song)}</p>
+                    <div class="d-flex">
+                        Actions
+                    </div>
+                </div>
+            </div>
+        `);
+    }
+    
+    halfmoon.toggleModal('queue-modal');
+}
