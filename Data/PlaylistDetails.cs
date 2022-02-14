@@ -1,6 +1,6 @@
 using supmusic.Models;
 
-namespace supmusic.Controllers;
+namespace supmusic.Data;
 
 public class PlaylistDetails
 {
