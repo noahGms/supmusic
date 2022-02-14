@@ -193,7 +193,7 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <script>
-        window.userId = "@UserManager.FindByNameAsync(User.Identity.Name).Result.Id"
+        window.userId = "@UserManager.FindByNameAsync(User.Identity?.Name).Result.Id"
     </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 }

@@ -28,35 +28,41 @@ const playerModeProxy = new Proxy(playerMode, {
     }
 });
 
-const current_song = JSON.parse(localStorage.getItem('current_song'));
-if (current_song) {
-    loadSong(current_song.path);
-    updateSongInProgressText(current_song.name);
-    playerModeProxy.isPlaylist = false;
-}
-const playlistSong = JSON.parse(localStorage.getItem('playlist'));
-const playlistCurrentSong = localStorage.getItem('current_song_playlist');
-if (playlistSong && playlistCurrentSong) {
-    loadSong(playlistSong[parseInt(playlistCurrentSong)].path);
-    updateSongInProgressText(playlistSong[parseInt(playlistCurrentSong)].name);
-    localStorage.setItem('current_song_playlist', playlistCurrentSong);
-    playerModeProxy.isPlaylist = true;
-}
-
-wavesurfer.on('pause', function () {
-   const pauseButton = document.getElementById("pauseButton");
-   pauseButton.innerHTML = `<i class="fa fa-play"></i>`;
-});
-
-wavesurfer.on('play', function () {
-    const pauseButton = document.getElementById("pauseButton");
-    pauseButton.innerHTML = `<i class="fa fa-pause"></i>`;
-});
-
-wavesurfer.on('finish', function () {
-    if (playerModeProxy.isPlaylist) {
-        nextPlaylistSong();
+$(document).ready(function () {
+    const current_song = JSON.parse(localStorage.getItem('current_song'));
+    if (current_song) {
+        loadSong(current_song.path);
+        updateSongInProgressText(current_song.name);
+        playerModeProxy.isPlaylist = false;
     }
+    const playlistSong = JSON.parse(localStorage.getItem('playlist'));
+    const playlistCurrentSong = localStorage.getItem('current_song_playlist');
+    if (playlistSong && playlistCurrentSong) {
+        loadSong(playlistSong[parseInt(playlistCurrentSong)].path);
+        updateSongInProgressText(playlistSong[parseInt(playlistCurrentSong)].name);
+        localStorage.setItem('current_song_playlist', playlistCurrentSong);
+        playerModeProxy.isPlaylist = true;
+    }
+
+    wavesurfer.on('pause', function () {
+        const pauseButton = document.getElementById("pauseButton");
+        pauseButton.innerHTML = `<i class="fa fa-play"></i>`;
+    });
+
+    wavesurfer.on('play', function () {
+        const pauseButton = document.getElementById("pauseButton");
+        pauseButton.innerHTML = `<i class="fa fa-pause"></i>`;
+    });
+
+    wavesurfer.on('finish', function () {
+        if (playerModeProxy.isPlaylist) {
+            nextPlaylistSong();
+        }
+    });
+
+    $('#volumeSlider').change(handleVolumeChange);
+    
+    setVolumeFromLocalStorage();
 });
 
 function loadSong(path) {
@@ -248,10 +254,7 @@ function handleVolumeChange(event) {
     localStorage.setItem('audio_volume', volume);
 }
 
-$('#volumeSlider').change(handleVolumeChange);
-
 function setVolumeFromLocalStorage() {
     const volume = localStorage.getItem('audio_volume') * 100 || 50;
     $('#volumeSlider').val(volume).trigger("change");
-};
-setVolumeFromLocalStorage();
+}
