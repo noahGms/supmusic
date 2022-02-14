@@ -15,7 +15,7 @@ const playerMode = {};
 const playerModeProxy = new Proxy(playerMode, {
     set: function(target, key, value) {
         target[key] = value;
-        
+
         if (value === false) {
             $('#previousSong').prop("disabled",true);
             $('#nextSong').prop("disabled",true);
@@ -23,7 +23,7 @@ const playerModeProxy = new Proxy(playerMode, {
             $('#previousSong').prop("disabled",false);
             $('#nextSong').prop("disabled",false);
         }
-        
+
         return true;
     }
 });
@@ -119,44 +119,42 @@ function nextPlaylistSong() {
     const songs = JSON.parse(localStorage.getItem('playlist'));
     const currentSong = localStorage.getItem('current_song_playlist');
 
-    const nextCurrentSong = parseInt(currentSong) + 1;
-    if (nextCurrentSong < songs.length) {
-        loadSong(songs[nextCurrentSong].path);
-        updateSongInProgressText(songs[nextCurrentSong].name);
-        wavesurfer.on('ready', function () {
-            wavesurfer.play();
-        });
-        localStorage.setItem('current_song_playlist', nextCurrentSong);
-    } else {
-        loadSong(songs[0].path);
-        updateSongInProgressText(songs[0].name);
-        wavesurfer.on('ready', function () {
-           stopSong(); 
-        });
-        localStorage.setItem('current_song_playlist', 0);
+    let nextCurrentSong = parseInt(currentSong) + 1;
+    if (nextCurrentSong === songs.length) {
+        nextCurrentSong = 0;
     }
+
+    loadSong(songs[nextCurrentSong].path);
+    updateSongInProgressText(songs[nextCurrentSong].name);
+    
+    wavesurfer.on('ready', function () {
+        if (nextCurrentSong === 0) {
+            stopSong();
+        } else {
+            wavesurfer.play();
+        }
+    });
+    
+    localStorage.setItem('current_song_playlist', nextCurrentSong);
 }
 
 function previousPlaylistSong() {
     const songs = JSON.parse(localStorage.getItem('playlist'));
     const currentSong = localStorage.getItem('current_song_playlist');
 
-    if (currentSong > 0) {
-        const previousCurrentSong = parseInt(currentSong) - 1;
-        loadSong(songs[previousCurrentSong].path);
-        updateSongInProgressText(songs[previousCurrentSong].name);
-        wavesurfer.on('ready', function () {
-            wavesurfer.play();
-        });
-        localStorage.setItem('current_song_playlist', previousCurrentSong);
-    } else {
-        loadSong(songs[0].path);
-        updateSongInProgressText(songs[0].name);
-        wavesurfer.on(function () {
-           stopSong(); 
-        });
-        localStorage.setItem('current_song_playlist', 0);
-    }
+    let previousCurrentSong = parseInt(currentSong) - 1;
+    if (previousCurrentSong < 0) {
+        previousCurrentSong = 0;
+    } 
+
+    loadSong(songs[previousCurrentSong].path);
+    updateSongInProgressText(songs[previousCurrentSong].name);
+    
+    wavesurfer.on('ready', function () {
+        wavesurfer.play();
+    });
+    
+    localStorage.setItem('current_song_playlist', previousCurrentSong);
 }
 
 function pauseSong() {
