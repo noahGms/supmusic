@@ -180,12 +180,9 @@ function openQueueModal() {
             const bgColor = isCurrentSong ? 'background-color: gray !important; color: white;' : '';
             
             $('#queue-modal-content').append(`
-                <div class="card h-50" style="${bgColor}">
+                <div class="card h-50 bg-very-dark" style="${bgColor}">
                     <div class="d-flex justify-content-between align-items-center h-full">
                         <p class="card-title mb-0">${song.name}</p>
-                        <div class="d-flex">
-                            Actions
-                        </div>
                     </div>
                 </div>
             `);
@@ -196,9 +193,6 @@ function openQueueModal() {
             <div class="card h-50" style="background-color: gray !important; color: white;">
                 <div class="d-flex justify-content-between align-items-center h-full">
                     <p class="card-title mb-0">${song.name}</p>
-                    <div class="d-flex">
-                        Actions
-                    </div>
                 </div>
             </div>
         `);
