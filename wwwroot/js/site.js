@@ -180,7 +180,7 @@ function openQueueModal() {
             const bgColor = isCurrentSong ? 'background-color: gray !important; color: white;' : '';
             
             $('#queue-modal-content').append(`
-                <div class="card h-50 bg-very-dark" style="${bgColor}">
+                <div class="card h-50 bg-very-dark text-white" style="${bgColor}">
                     <div class="d-flex justify-content-between align-items-center h-full">
                         <p class="card-title mb-0">${song.name}</p>
                     </div>
@@ -220,7 +220,7 @@ async function openAddSongToPlaylistModal(songId) {
     const csrfToken = $('input[name="__RequestVerificationToken"]').val();
     data.forEach(playlist => {
         $('#add-song-to-playlist-modal-content').append(`
-            <div class="card h-50 bg-very-dark">
+            <div class="card h-50 bg-very-dark text-white">
                 <div class="d-flex justify-content-between align-items-center h-full">
                     <p class="card-title mb-0">${playlist.name}</p>
                     <div class="d-flex">
