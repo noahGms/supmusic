@@ -135,6 +135,13 @@ public class PlaylistController : Controller
         return await query.ToListAsync();
     }
 
+    public async Task<List<Playlist>> GetAllMyPlaylist()
+    {
+        var query = _context.Playlists.Where(p => p.User == GetCurrentUser());
+
+        return await query.ToListAsync();
+    }
+
     private IdentityUser GetCurrentUser()
     {
         return _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result;

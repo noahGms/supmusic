@@ -4,8 +4,20 @@
     margin-bottom: 30px;
 }
 
+#modal-add-song-to-playlist-content {
+    overflow-y: scroll;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
 @media screen and (max-width: 576px) {
     #modal-queue-content {
+        overflow-y: auto;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    #modal-add-song-to-playlist-content {
         overflow-y: auto;
         margin-top: 0;
         margin-bottom: 0;

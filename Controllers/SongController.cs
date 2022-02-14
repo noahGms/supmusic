@@ -92,6 +92,31 @@ public class SongController : Controller
         
         return RedirectToAction(nameof(Index));
     }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<RedirectToActionResult> AddSongToPlaylist(int Id, int playlistId)
+    {
+        _logger.LogInformation(Id.ToString());
+        _logger.LogInformation(playlistId.ToString());
+        var song = await _context.Songs.FindAsync(Id);
+        var playlist = await _context.Playlists.FindAsync(playlistId);
+        
+        if (song == null || playlist == null)
+        {
+            NotFound();
+        }
+
+        var playlistSong = new PlaylistSong
+        {
+            Playlist = playlist,
+            Song = song
+        };
+        _context.PlaylistSongs.Add(playlistSong);
+        await _context.SaveChangesAsync();
+        
+        return RedirectToAction(nameof(Index));
+    }
 
     private string GetAbsolutePath()
     {

@@ -199,3 +199,42 @@ function openQueueModal() {
     
     halfmoon.toggleModal('queue-modal');
 }
+
+async function openAddSongToPlaylistModal(songId) {
+    const response = await fetch('/Playlist/GetAllMyPlaylist/');
+    const data = await response.json();
+
+    $('#add-song-to-playlist-modal-content').html('');
+    
+    if (data.length === 0) {
+        $('#add-song-to-playlist-modal-content').html(`
+            <div class="alert alert-primary" role="alert">
+                <h4 class="alert-heading mb-0">
+                    No playlist found
+                </h4>
+            </div>
+        `);
+    }
+
+    const csrfToken = $('input[name="__RequestVerificationToken"]').val();
+    data.forEach(playlist => {
+        $('#add-song-to-playlist-modal-content').append(`
+            <div class="card h-50 bg-very-dark">
+                <div class="d-flex justify-content-between align-items-center h-full">
+                    <p class="card-title mb-0">${playlist.name}</p>
+                    <div class="d-flex">
+                        <form action="/Song/AddSongToPlaylist/${songId}" method="post">
+                            <input name="__RequestVerificationToken" type="hidden" value="${csrfToken}" />
+                            <input type="text" id="playlistId" name="playlistId" value="${playlist.id}" hidden>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-plus"></i>                                    
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+    
+    halfmoon.toggleModal('add-song-to-playlist-modal');
+}

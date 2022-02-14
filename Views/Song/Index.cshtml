@@ -11,6 +11,8 @@
     </div>
 </div>
 
+
+@Html.AntiForgeryToken()
 <div class="px-10" style="margin-bottom: 80px;">
     @if (!Model.Any())
     {
@@ -31,6 +33,9 @@
                 <div class="d-flex">
                     <button onclick='playSong("@item.Path")' class="btn btn-success mr-10">
                         <i class="fa fa-play"></i>
+                    </button>
+                    <button onclick="openAddSongToPlaylistModal(@item.ID)" class="btn btn-primary mr-10">
+                        <i class="fa fa-plus"></i>
                     </button>
                     <form asp-controller="Song" asp-action="Delete" asp-route-id="@item.ID" method="post">
                         <button type="submit" class="btn btn-danger">
