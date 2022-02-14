@@ -238,3 +238,17 @@ async function openAddSongToPlaylistModal(songId) {
     
     halfmoon.toggleModal('add-song-to-playlist-modal');
 }
+
+function handleVolumeChange(event) {
+    const volume = event.target.value / 100;
+    wavesurfer.setVolume(volume);
+    localStorage.setItem('audio_volume', volume);
+}
+
+$('#volumeSlider').change(handleVolumeChange);
+
+function setVolumeFromLocalStorage() {
+    const volume = localStorage.getItem('audio_volume') * 100 || 50;
+    $('#volumeSlider').val(volume).trigger("change");
+};
+setVolumeFromLocalStorage();
