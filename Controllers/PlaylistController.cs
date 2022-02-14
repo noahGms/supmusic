@@ -8,17 +8,10 @@ using supmusic.Models;
 namespace supmusic.Controllers;
 
 [Authorize]
-public class PlaylistController : Controller
+public class PlaylistController : BaseController<PlaylistController>
 {
-    private readonly ApplicationDbContext _context;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly ILogger<SongController> _logger;
-
-    public PlaylistController(UserManager<IdentityUser> userManager, ApplicationDbContext context, ILogger<SongController> logger)
+    public PlaylistController(ApplicationDbContext context, UserManager<IdentityUser> userManager, ILogger<PlaylistController> logger) : base(context, userManager, logger)
     {
-        _userManager = userManager;
-        _context = context;
-        _logger = logger;
     }
 
     public async Task<IActionResult> Index()
@@ -161,10 +154,5 @@ public class PlaylistController : Controller
         var query = _context.Playlists.Where(p => p.User == GetCurrentUser());
 
         return await query.ToListAsync();
-    }
-
-    private IdentityUser GetCurrentUser()
-    {
-        return _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result;
     }
 }

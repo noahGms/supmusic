@@ -1,16 +1,15 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using supmusic.Data;
 using supmusic.Models;
 
 namespace supmusic.Controllers;
 
-public class HomeController : Controller
+public class HomeController : BaseController<HomeController>
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ApplicationDbContext context, UserManager<IdentityUser> userManager, ILogger<HomeController> logger) : base(context, userManager, logger)
     {
-        _logger = logger;
     }
 
     public IActionResult Index()

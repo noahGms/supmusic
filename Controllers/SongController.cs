@@ -9,23 +9,17 @@ using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 namespace supmusic.Controllers;
 
 [Authorize]
-public class SongController : Controller
+public class SongController : BaseController<SongController>
 {
-    private readonly ApplicationDbContext _context;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly ILogger<SongController> _logger;
     private readonly IHostingEnvironment _environment;
-    private string _baseDir;
+    private readonly string _baseDir;
 
-    public SongController(UserManager<IdentityUser> userManager, ILogger<SongController> logger, IHostingEnvironment environment, ApplicationDbContext context)
+    public SongController(ApplicationDbContext context, UserManager<IdentityUser> userManager, ILogger<SongController> logger, IHostingEnvironment environment) : base(context, userManager, logger)
     {
-        _userManager = userManager;
-        _logger = logger;
         _environment = environment;
-        _context = context;
-        _baseDir = _environment.ContentRootPath;
+        _baseDir = environment.ContentRootPath;
     }
-    
+
     public async Task<IActionResult> Index()
     {
         var user = GetCurrentUser();
@@ -110,8 +104,6 @@ public class SongController : Controller
     [ValidateAntiForgeryToken]
     public async Task<RedirectToActionResult> AddSongToPlaylist(int Id, int playlistId)
     {
-        _logger.LogInformation(Id.ToString());
-        _logger.LogInformation(playlistId.ToString());
         var song = await _context.Songs.FindAsync(Id);
         var playlist = await _context.Playlists.FindAsync(playlistId);
         
@@ -146,10 +138,5 @@ public class SongController : Controller
         var goodFileName = fileName.Remove(indexOfSubstring, substring.Length);
         
         return goodFileName;
-    }
-    
-    private IdentityUser GetCurrentUser()
-    {
-        return _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result;
     }
 }
