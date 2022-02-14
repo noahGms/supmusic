@@ -87,6 +87,10 @@
                 </div>
             </div>
         </div>
+            
+        <button onclick="toggleDarkMode()" class="btn btn-action ml-10" id="toggleDarkModeBtn">
+            <i class="fas fa-moon"></i>
+        </button>
     </nav>
     @if (SignInManager.IsSignedIn(User))
     {
@@ -111,15 +115,6 @@
             <main role="main" class="container pb-3">
                 @RenderBody()
             </main>
-        </div>
-    </div>
-
-    <div class="position-fixed right-0 mr-20 mb-20 z-50" style="@(SignInManager.IsSignedIn(User) ? "bottom: 80px;" : "bottom: 0;")">
-        <div class="custom-switch">
-            <input onchange="toggleDarkMode()" type="checkbox" id="toggleDarkModeInput"/>
-            <label id="toggleDarkModeLabel" for="toggleDarkModeInput">
-                <i class="fas fa-moon"></i>
-            </label>
         </div>
     </div>
 
