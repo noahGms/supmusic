@@ -28,11 +28,10 @@ const playerModeProxy = new Proxy(playerMode, {
     }
 });
 
-const current_song = localStorage.getItem('current_song');
+const current_song = JSON.parse(localStorage.getItem('current_song'));
 if (current_song) {
-    loadSong(current_song);
-    const name = getNameWithoutExtension(current_song);
-    updateSongInProgressText(name);
+    loadSong(current_song.path);
+    updateSongInProgressText(current_song.name);
     playerModeProxy.isPlaylist = false;
 }
 const playlistSong = JSON.parse(localStorage.getItem('playlist'));
@@ -61,17 +60,25 @@ wavesurfer.on('finish', function () {
 });
 
 function loadSong(path) {
-    wavesurfer.load(window.location.origin + `/musics/${window.userId}/` + path);
+    let fullPath;
+    if (path.startsWith('http')) {
+        fullPath = path;
+    } else {
+        fullPath = window.location.origin + `/musics/${window.userId}/` + path;
+    }
+    wavesurfer.load(fullPath);
 }
 
-function playSong(path) {
+function playSong(name, path) {
     loadSong(path);
-    const name = getNameWithoutExtension(path);
     updateSongInProgressText(name);
     wavesurfer.on('ready', function () {
         wavesurfer.play();
     });
-    localStorage.setItem('current_song', path);
+    localStorage.setItem('current_song', JSON.stringify({
+        name,
+        path
+    }));
     localStorage.removeItem('playlist');
     localStorage.removeItem('current_song_playlist');
 
@@ -158,10 +165,6 @@ function updateSongInProgressText(name) {
     $('#songInProgressText').text(name);
 }
 
-function getNameWithoutExtension(name) {
-    return name.replace('.mp3', '');
-}
-
 function openQueueModal() {
     $('#queue-modal-content').html('');
     if (playerModeProxy.isPlaylist) {
@@ -184,11 +187,11 @@ function openQueueModal() {
             `);
         });
     } else {
-        const song = localStorage.getItem('current_song');
+        const song = JSON.parse(localStorage.getItem('current_song'));
         $('#queue-modal-content').append(`
             <div class="card h-50" style="background-color: gray !important; color: white;">
                 <div class="d-flex justify-content-between align-items-center h-full">
-                    <p class="card-title mb-0">${getNameWithoutExtension(song)}</p>
+                    <p class="card-title mb-0">${song.name}</p>
                     <div class="d-flex">
                         Actions
                     </div>

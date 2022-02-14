@@ -31,7 +31,7 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </p>
                 <div class="d-flex">
-                    <button onclick='playSong("@item.Path")' class="btn btn-success mr-10">
+                    <button onclick='playSong("@item.Name", "@item.Path")' class="btn btn-success mr-10">
                         <i class="fa fa-play"></i>
                     </button>
                     <button onclick="openAddSongToPlaylistModal(@item.ID)" class="btn btn-primary mr-10">

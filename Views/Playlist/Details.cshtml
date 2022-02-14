@@ -43,7 +43,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <p class="card-title mb-0">@Html.DisplayFor(model => item.Song.Name)</p>
                                 <div class="d-flex align-items-center">
-                                    <button onclick='playSong("@item.Song.Path")' class="btn btn-success mr-10">
+                                    <button onclick='playSong("@item.Song.Name", "@item.Song.Path")' class="btn btn-success mr-10">
                                         <i class="fa fa-play"></i>
                                     </button>
                                     <form asp-controller="Playlist" asp-action="DeleteSong" asp-route-id="@item.Playlist.ID" method="post">
@@ -80,7 +80,7 @@ function searchSong() {
                                 ${song.name}
                             </h5>
                             <div class="d-flex align-items-center">
-                                <button onclick='playSong("${song.path}")' class="btn btn-success mr-10">
+                                <button onclick='playSong("${song.name}", "${song.path}")' class="btn btn-success mr-10">
                                    <i class="fa fa-play"></i>
                                 </button>
                                 <form action="/Playlist/AddSong/${playlistId}" method="post">
