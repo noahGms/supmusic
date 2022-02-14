@@ -250,3 +250,16 @@ function setVolumeFromLocalStorage() {
     const volume = localStorage.getItem('audio_volume') * 100 || 50;
     $('#volumeSlider').val(volume).trigger("change");
 }
+
+function toggleMute() {
+    if (wavesurfer.getMute()) {
+        $('#toggleMuteBtn').html(`
+            <i class="fa fa-volume-off"></i>
+        `);
+    } else {
+        $('#toggleMuteBtn').html(`
+            <i class="fa fa-volume-mute"></i>
+        `);
+    }
+    wavesurfer.toggleMute();
+}
