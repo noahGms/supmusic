@@ -130,21 +130,21 @@
 
             <div class="row w-full">
                 <div class="col-4 text-left">
-                    <div class="h-full d-flex align-items-center">Song in progress: <span id="songInProgressText"></span></div>
+                    <div class="h-full d-flex align-items-center">Currently playing : <span class="ml-5" id="songInProgressText"></span></div>
                 </div>
                 <div class="col-4">
                     <div class="d-flex flex-column">
-                        <div>
-                            <button id="previousSong" class="me-1" onclick="previousPlaylistSong()">
+                        <div class="mb-5">
+                            <button id="previousSong" class="me-1 btn" onclick="previousPlaylistSong()">
                                 <i class="fa fa-backward"></i>
                             </button>
-                            <button id="pauseButton" class="me-1" onclick="pauseSong()">
+                            <button id="pauseButton" class="me-1 btn" onclick="pauseSong()">
                                 <i class="fa fa-play"></i>
                             </button>
-                            <button id="nextSong" class="me-1" onclick="nextPlaylistSong()">
+                            <button id="nextSong" class="me-1 btn" onclick="nextPlaylistSong()">
                                 <i class="fa fa-forward"></i>
                             </button>
-                            <button onclick="stopSong()">
+                            <button class="btn" onclick="stopSong()">
                                 <i class="fa fa-stop"></i>
                             </button>
                         </div>
@@ -159,7 +159,7 @@
                         min="0"
                         max="100"
                         value="50"/>
-                    <button class="ml-5">
+                    <button class="ml-5 btn">
                         <i class="fa fa-list"></i>
                     </button>
                 </div>
